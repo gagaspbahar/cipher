@@ -7,6 +7,7 @@ import {
   FormGroup,
   TextField,
   Typography,
+  Stack,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useEffect, useState } from "react";
@@ -20,6 +21,8 @@ export default function Vigenere() {
   const [extended, setExtended] = useState(false);
   const [result, setResult] = useState("");
   const [disable, setDisable] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [filename, setFilename] = useState("");
 
   const handleSubmit = () => {
     const data = {
@@ -91,16 +94,47 @@ export default function Vigenere() {
           Vigenere Cipher
         </Typography>
         <FormGroup>
-          <TextField
-            sx={{ input: { color: "white" }, marginY: "0.5em" }}
-            variant="outlined"
-            color="primary"
-            label="Text"
-            focused
-            onChange={(e) => setText(e.target.value)}
+          <Stack
+            direction="row"
+            spacing="1em"
+            sx={{
+              marginY: "1em",
+              justifyContent: "space-between",
+            }}
           >
-            Enter text to encrypt or decrypt
-          </TextField>
+            {isDisabled ? (
+              <Typography>
+                Uploaded file: {filename}
+              </Typography>
+            ) : (
+              <TextField
+                sx={{
+                  input: { color: "white" },
+                  marginY: "0.5em",
+                  width: "70%",
+                }}
+                variant="outlined"
+                color="primary"
+                label="Text"
+                focused
+                onChange={(e) => setText(e.target.value)}
+              >
+                Enter text to encrypt or decrypt
+              </TextField>
+            )}
+
+            <Button
+              variant="raised"
+              component="label"
+              sx={{
+                // width: "25%",
+                size: "small",
+              }}
+            >
+              Upload File
+              <input type="file" hidden />
+            </Button>
+          </Stack>
           <TextField
             sx={{ input: { color: "white" }, marginY: "0.5em" }}
             variant="outlined"
