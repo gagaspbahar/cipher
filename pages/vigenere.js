@@ -7,7 +7,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Vigenere() {
   const [text, setText] = useState("");
@@ -15,6 +15,7 @@ export default function Vigenere() {
   const [decrypt, setDecrypt] = useState(false);
   const [autokey, setAutokey] = useState(false);
   const [result, setResult] = useState("");
+  const [disable, setDisable] = useState(true);
 
   const handleSubmit = () => {
     const data = new FormData();
@@ -24,7 +25,7 @@ export default function Vigenere() {
     data.append("autokey", autokey);
 
     const data2 = {
-      text: text,
+      text: text.toUpperCase(),
       key: key,
       decrypt: decrypt,
       autokey: autokey,
@@ -38,6 +39,25 @@ export default function Vigenere() {
       });
     });
   };
+
+  const handleSpace = () => {
+    if (result.includes(" ")) {
+      setResult(result.replace(/ /g, ""));
+    } else {
+      setResult(result.replace(/(.{5})/g, "$1 "));
+    }
+  };
+
+  useEffect(() => {
+    const checkDisable = () => {
+      if (text === "" || key === "") {
+        setDisable(true);
+      } else {
+        setDisable(false);
+      }
+    };
+    checkDisable();
+  }, [text, key]);
 
   return (
     <>
@@ -87,16 +107,27 @@ export default function Vigenere() {
             label="Decrypt"
             onChange={(e) => setDecrypt(e.target.checked)}
           />
-          <Button variant="outlined" onClick={handleSubmit}>
-            Encrypt
+          <Button variant="outlined" onClick={handleSubmit} disabled={disable}>
+            Go!
           </Button>
         </FormGroup>
 
-        <Typography sx={{
-          marginY: "1em",
-        }}>
+        <Typography
+          sx={{
+            marginY: "1em",
+          }}
+        >
           Result: {result}
         </Typography>
+        <Button
+          variant="outlined"
+          sx={{
+            width: "15%",
+          }}
+          onClick={handleSpace}
+        >
+          Toggle Space
+        </Button>
       </Container>
     </>
   );
