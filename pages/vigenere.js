@@ -1,5 +1,6 @@
 import {
   Button,
+  ButtonGroup,
   Checkbox,
   Container,
   FormControlLabel,
@@ -14,25 +15,21 @@ export default function Vigenere() {
   const [key, setKey] = useState("");
   const [decrypt, setDecrypt] = useState(false);
   const [autokey, setAutokey] = useState(false);
+  const [extended, setExtended] = useState(false);
   const [result, setResult] = useState("");
   const [disable, setDisable] = useState(true);
 
   const handleSubmit = () => {
-    const data = new FormData();
-    data.append("text", text);
-    data.append("key", key);
-    data.append("decrypt", decrypt);
-    data.append("autokey", autokey);
-
-    const data2 = {
-      text: text.toUpperCase(),
-      key: key,
+    const data = {
+      text: extended ? text : text.replace(/[^A-Za-z]/g, '').toUpperCase(),
+      key: extended ? key : key.replace(/[^A-Za-z]/g, '').toUpperCase(),
       decrypt: decrypt,
       autokey: autokey,
+      extended: extended,
     };
     fetch("/api/vigenere", {
       method: "POST",
-      body: JSON.stringify(data2),
+      body: JSON.stringify(data),
     }).then((res) => {
       res.json().then((data) => {
         setResult(data.result);
@@ -46,6 +43,15 @@ export default function Vigenere() {
     } else {
       setResult(result.replace(/(.{5})/g, "$1 "));
     }
+  };
+
+  const downloadAsText = () => {
+    const element = document.createElement("a");
+    const file = new Blob([result], { type: "text/plain" });
+    element.href = URL.createObjectURL(file);
+    element.download = "result.txt";
+    document.body.appendChild(element);
+    element.click();
   };
 
   useEffect(() => {
@@ -107,6 +113,11 @@ export default function Vigenere() {
             label="Decrypt"
             onChange={(e) => setDecrypt(e.target.checked)}
           />
+          <FormControlLabel
+            control={<Checkbox sx={{ color: "white" }} />}
+            label="Use all ASCII characters"
+            onChange={(e) => setExtended(e.target.checked)}
+          />
           <Button variant="outlined" onClick={handleSubmit} disabled={disable}>
             Go!
           </Button>
@@ -119,15 +130,27 @@ export default function Vigenere() {
         >
           Result: {result}
         </Typography>
-        <Button
-          variant="outlined"
-          sx={{
-            width: "15%",
-          }}
-          onClick={handleSpace}
-        >
-          Toggle Space
-        </Button>
+
+        <ButtonGroup>
+          <Button
+            variant="outlined"
+            sx={{
+              width: "25%",
+            }}
+            onClick={handleSpace}
+          >
+            Toggle Space
+          </Button>
+          <Button
+            variant="outlined"
+            sx={{
+              width: "25%",
+            }}
+            onClick={downloadAsText}
+          >
+            Download as Text File
+          </Button>
+        </ButtonGroup>
       </Container>
     </>
   );

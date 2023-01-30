@@ -12,7 +12,8 @@ export default function handler(req, res) {
   const key = body.key;
   const decrypt = body.decrypt;
   const autokey = body.autokey;
+  const extended = body.extended;
   const vigenere = decrypt ? decipher : cipher;
-  const result = vigenere(text, key, autokey);
+  const result = vigenere(text, key, autokey, extended);
   res.status(200).json({ result: result });
 }
