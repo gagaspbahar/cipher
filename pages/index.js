@@ -25,6 +25,11 @@ export default function Home() {
             Affine Cipher
           </h2>
         </Link>
+        <Link href="/hill">
+          <h2>
+            Hill Cipher
+          </h2>
+        </Link>
       </Container>
     </>
   )
