@@ -8,7 +8,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function Vigenere() {
   const [text, setText] = useState("");
@@ -21,8 +23,8 @@ export default function Vigenere() {
 
   const handleSubmit = () => {
     const data = {
-      text: extended ? text : text.replace(/[^A-Za-z]/g, '').toUpperCase(),
-      key: extended ? key : key.replace(/[^A-Za-z]/g, '').toUpperCase(),
+      text: extended ? text : text.replace(/[^A-Za-z]/g, "").toUpperCase(),
+      key: extended ? key : key.replace(/[^A-Za-z]/g, "").toUpperCase(),
       decrypt: decrypt,
       autokey: autokey,
       extended: extended,
@@ -68,6 +70,18 @@ export default function Vigenere() {
   return (
     <>
       <Container className="main">
+        <Link href="/">
+          <ArrowBackIcon
+            sx={{
+              color: "white",
+              "&:hover": {
+                cursor: "pointer",
+                color: "primary.main",
+              },
+              marginBottom: "1em",
+            }}
+          />
+        </Link>
         <Typography
           sx={{
             fontSize: "2em",
@@ -78,7 +92,7 @@ export default function Vigenere() {
         </Typography>
         <FormGroup>
           <TextField
-            sx={{ input: { color: "white" }, margin: "0.5em" }}
+            sx={{ input: { color: "white" }, marginY: "0.5em" }}
             variant="outlined"
             color="primary"
             label="Text"
@@ -88,7 +102,7 @@ export default function Vigenere() {
             Enter text to encrypt or decrypt
           </TextField>
           <TextField
-            sx={{ input: { color: "white" }, margin: "0.5em" }}
+            sx={{ input: { color: "white" }, marginY: "0.5em" }}
             variant="outlined"
             color="primary"
             label="Key"
@@ -123,13 +137,18 @@ export default function Vigenere() {
           </Button>
         </FormGroup>
 
-        <Typography
+        <TextField
           sx={{
-            marginY: "1em",
+            input: { color: "white" },
+            marginTop: "2em",
+            marginBottom: "1em",
           }}
-        >
-          Result: {result}
-        </Typography>
+          variant="outlined"
+          color="primary"
+          label="Result"
+          focused
+          value={result}
+        />
 
         <ButtonGroup>
           <Button

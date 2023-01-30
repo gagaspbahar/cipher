@@ -1,8 +1,15 @@
-import Head from 'next/head'
-import Link from 'next/link'
-import { Container } from '@mui/material'
+import Head from "next/head";
+import Link from "next/link";
+import { Container, Typography } from "@mui/material";
 
 export default function Home() {
+  const childSx = {
+    fontSize: "1.25em",
+    marginBottom: "0.25em",
+    "&:hover": {
+      color: "primary.main",
+    },
+  };
   return (
     <>
       <Head>
@@ -12,25 +19,25 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container className="main">
-        <h1 className="title">
-          cipher
-        </h1>
+        <Typography
+          sx={{
+            fontSize: "2rem",
+            fontWeight: "bold",
+            marginY: "1rem",
+          }}
+        >
+          Cryptography - Classical Ciphers
+        </Typography>
         <Link href="/vigenere">
-          <h2>
-            Vigenere Cipher
-          </h2>
+          <Typography sx={childSx}>Vigenere Cipher</Typography>
         </Link>
         <Link href="/affine">
-          <h2>
-            Affine Cipher
-          </h2>
+          <Typography sx={childSx}>Affine Cipher</Typography>
         </Link>
         <Link href="/hill">
-          <h2>
-            Hill Cipher
-          </h2>
+          <Typography sx={childSx}>Hill Cipher</Typography>
         </Link>
       </Container>
     </>
-  )
+  );
 }
