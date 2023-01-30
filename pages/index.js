@@ -20,6 +20,11 @@ export default function Home() {
             Vigenere Cipher
           </h2>
         </Link>
+        <Link href="/affine">
+          <h2>
+            Affine Cipher
+          </h2>
+        </Link>
       </Container>
     </>
   )
