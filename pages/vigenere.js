@@ -23,6 +23,7 @@ export default function Vigenere() {
   const [disable, setDisable] = useState(true);
   const [isDisabled, setIsDisabled] = useState(false);
   const [filename, setFilename] = useState("");
+  const [file, setFile] = useState(null);
 
   const handleSubmit = () => {
     const data = {
@@ -50,6 +51,23 @@ export default function Vigenere() {
     }
   };
 
+  // const handleChangeFile = () => {
+  //   // const fileInput = e.target.files[0];
+  //   const fileInput = file
+  //   console.log(fileInput)
+  //   setFilename(fileInput.name);
+  //   console.log("msk")
+  //   setFile(fileInput);
+  //   const reader = new FileReader();
+  //   reader.readAsText(fileInput);
+  //   reader.onload = () => {
+  //     setText(reader.result);
+  //     setIsDisabled(true);
+  //     console.log("msk")
+  //   };
+  //   console.log("msk")
+  // }
+
   const downloadAsText = () => {
     const element = document.createElement("a");
     const file = new Blob([result], { type: "text/plain" });
@@ -69,6 +87,50 @@ export default function Vigenere() {
     };
     checkDisable();
   }, [text, key]);
+
+  useEffect(() => {
+    console.log(file)
+    if (file !== null){
+      setFilename(file.name);
+      const reader = new FileReader();
+      reader.readAsText(file);
+      reader.onload = () => {
+        console.log("test")
+        const text = reader.result
+        setText(text);
+        setIsDisabled(true);
+      };
+    } else {
+      console.log("masuk")
+      setIsDisabled(false);
+    }
+  }, [file]);
+
+  // useEffect(() => {{
+  //   console.log(filename)
+  //   console.log(isDisabled)
+  // }}, [filename, isDisabled])
+
+  // useEffect(() => {
+  //   console.log(filename)
+  //   console.log(isDisabled)
+  // }, [filename, isDisabled])
+
+  // const hiddenFileInput = useRef(null);
+
+  // This uses nextjs so dont use document
+  // const fileInput = document.querySelector('input[type="file]')
+  // fileInput.addEventListener("change", (e) => {
+  //   const file = e.target.files[0];
+  //   setFilename(file.name);
+  //   setFile(file);
+  //   const reader = new FileReader();
+  //   reader.readAsText(file);
+  //   reader.onload = () => {
+  //     setText(reader.result);
+  //     setIsDisabled(true);
+  //   };
+  // });
 
   return (
     <>
@@ -103,9 +165,20 @@ export default function Vigenere() {
             }}
           >
             {isDisabled ? (
-              <Typography>
-                Uploaded file: {filename}
-              </Typography>
+              <>
+                <Typography>Uploaded file: {filename}</Typography>
+                <Button
+                  variant="raised"
+                  component="label"
+                  sx={{
+                    // width: "25%",
+                    size: "small",
+                  }}
+                  onClick={() => {setIsDisabled(false)}}
+                >
+                  Use text
+                </Button>
+              </>
             ) : (
               <TextField
                 sx={{
@@ -132,7 +205,17 @@ export default function Vigenere() {
               }}
             >
               Upload File
-              <input type="file" hidden />
+              <input
+                type="file"
+                hidden
+                onChange={(e) => {
+                  setIsDisabled(true)
+                  setFile(e.target.files[0]);
+                }}
+                onClick={(e) => {
+                  e.target.value = null;
+                }}
+              />
             </Button>
           </Stack>
           <TextField
