@@ -19,6 +19,7 @@ export default function Vigenere() {
   const [decrypt, setDecrypt] = useState(false);
   const [autokey, setAutokey] = useState(false);
   const [extended, setExtended] = useState(false);
+  const [lockExtended, setLockExtended] = useState(false);
   const [result, setResult] = useState("");
   const [disable, setDisable] = useState(true);
   const [isDisabled, setIsDisabled] = useState(false);
@@ -70,10 +71,20 @@ export default function Vigenere() {
 
   const downloadAsText = () => {
     const element = document.createElement("a");
-    const file = new Blob([result], { type: "text/plain" });
-    element.href = URL.createObjectURL(file);
-    element.download = "result.txt";
-    document.body.appendChild(element);
+    const output = [];
+    for (let i = 0; i < result.length; i++) {
+      output.push(result.charCodeAt(i));
+    }
+
+    const fileOutput = new Blob([new Uint8Array(output)]);
+    element.href = URL.createObjectURL(fileOutput);
+    console.log(element.href)
+    if (filename === "") {
+      element.download = "result.txt";
+    } else {
+      element.download = "result_" + filename;
+    }
+    // document.body.appendChild(element);
     element.click();
   };
 
@@ -89,19 +100,28 @@ export default function Vigenere() {
   }, [text, key]);
 
   useEffect(() => {
-    console.log(file)
-    if (file !== null){
+    console.log(file);
+    if (file !== null) {
       setFilename(file.name);
       const reader = new FileReader();
-      reader.readAsText(file);
-      reader.onload = () => {
-        console.log("test")
-        const text = reader.result
-        setText(text);
-        setIsDisabled(true);
-      };
+      if (file.name.includes(".txt")) {
+        reader.readAsText(file);
+        reader.onload = () => {
+          const text = reader.result;
+          setText(text);
+          setIsDisabled(true);
+        };
+      } else {
+        reader.readAsBinaryString(file);
+        reader.onload = () => {
+          const text = reader.result;
+          setText(text);
+          setIsDisabled(true);
+          setExtended(true);
+          setLockExtended(true);
+        };
+      }
     } else {
-      console.log("masuk")
       setIsDisabled(false);
     }
   }, [file]);
@@ -174,7 +194,10 @@ export default function Vigenere() {
                     // width: "25%",
                     size: "small",
                   }}
-                  onClick={() => {setIsDisabled(false)}}
+                  onClick={() => {
+                    setIsDisabled(false);
+                    setLockExtended(false);
+                  }}
                 >
                   Use text
                 </Button>
@@ -209,7 +232,7 @@ export default function Vigenere() {
                 type="file"
                 hidden
                 onChange={(e) => {
-                  setIsDisabled(true)
+                  setIsDisabled(true);
                   setFile(e.target.files[0]);
                 }}
                 onClick={(e) => {
@@ -247,6 +270,7 @@ export default function Vigenere() {
           <FormControlLabel
             control={<Checkbox sx={{ color: "white" }} />}
             label="Use all ASCII characters"
+            disabled={lockExtended}
             onChange={(e) => setExtended(e.target.checked)}
           />
           <Button variant="outlined" onClick={handleSubmit} disabled={disable}>
@@ -284,7 +308,7 @@ export default function Vigenere() {
             }}
             onClick={downloadAsText}
           >
-            Download as Text File
+            Download result
           </Button>
         </ButtonGroup>
       </Container>
