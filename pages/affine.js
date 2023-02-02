@@ -20,6 +20,8 @@ export default function Affine() {
   const [decrypt, setDecrypt] = useState(false);
   const [result, setResult] = useState("");
   const [disable, setDisable] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [file, setFile] = useState(null);
 
   const handleSubmit = () => {
     const data = {
@@ -56,6 +58,20 @@ export default function Affine() {
   };
 
   useEffect(() => {
+    if (file !== null) {
+      const reader = new FileReader();
+      reader.readAsText(file);
+      reader.onload = () => {
+        const text = reader.result;
+        setText(text);
+        setIsDisabled(true);
+      };
+    } else {
+      setIsDisabled(false);
+    }
+  }, [file]);
+
+  useEffect(() => {
     const checkDisable = () => {
       if (text === "" || mkey === "" || bkey === "") {
         setDisable(true);
@@ -90,22 +106,74 @@ export default function Affine() {
           Affine Cipher
         </Typography>
         <FormGroup>
-          <TextField
-            sx={{ input: { color: "white" }, margin: "0.5em" }}
-            variant="outlined"
-            color="primary"
-            label="Text"
-            focused
-            onChange={(e) => setText(e.target.value)}
+          <Stack
+            direction="row"
+            spacing="1em"
+            sx={{
+              marginY: "1em",
+              justifyContent: "space-between",
+            }}
           >
-            Enter text to encrypt or decrypt
-          </TextField>
+            {isDisabled ? (
+              <>
+                <Typography>Uploaded file: {file.name}</Typography>
+                <Button
+                  variant="raised"
+                  component="label"
+                  sx={{
+                    // width: "25%",
+                    size: "small",
+                  }}
+                  onClick={() => {
+                    setIsDisabled(false);
+                  }}
+                >
+                  Use text
+                </Button>
+              </>
+            ) : (
+              <TextField
+                sx={{
+                  input: { color: "white" },
+                  marginY: "0.5em",
+                  width: "70%",
+                }}
+                variant="outlined"
+                color="primary"
+                label="Text"
+                focused
+                placeholder="Enter text to encrypt or decrypt"
+                onChange={(e) => setText(e.target.value)}
+              >
+                Enter text to encrypt or decrypt
+              </TextField>
+            )}
+
+            <Button
+              variant="raised"
+              component="label"
+              sx={{
+                // width: "25%",
+                size: "small",
+              }}
+            >
+              Upload File
+              <input
+                type="file"
+                hidden
+                onChange={(e) => {
+                  setIsDisabled(true);
+                  setFile(e.target.files[0]);
+                }}
+                onClick={(e) => {
+                  e.target.value = null;
+                }}
+              />
+            </Button>
+          </Stack>
           <Stack
             direction="row"
             spacing={2}
-            sx={{
-              margin: "0.5em",
-            }}
           >
             <TextField
               sx={{ input: { color: "white" } }}
@@ -113,6 +181,7 @@ export default function Affine() {
               variant="outlined"
               color="primary"
               label="M-Key"
+              placeholder="ex: 5"
               focused
               onChange={(e) => setMKey(e.target.value)}
             >
@@ -124,6 +193,7 @@ export default function Affine() {
               variant="outlined"
               color="primary"
               label="B-Key"
+              placeholder="ex: 8"
               focused
               onChange={(e) => setBKey(e.target.value)}
             >
@@ -135,18 +205,23 @@ export default function Affine() {
             label="Decrypt"
             onChange={(e) => setDecrypt(e.target.checked)}
           />
-          <Button variant="outlined" onClick={handleSubmit} disabled={disable}>
+          <Button variant="contained" onClick={handleSubmit} disabled={disable}>
             Go!
           </Button>
         </FormGroup>
 
-        <Typography
+        <TextField
           sx={{
-            marginY: "1em",
+            input: { color: "white" },
+            marginTop: "2em",
+            marginBottom: "1em",
           }}
-        >
-          Result: {result}
-        </Typography>
+          variant="outlined"
+          color="primary"
+          label="Result"
+          focused
+          value={result}
+        />
 
         <ButtonGroup>
           <Button

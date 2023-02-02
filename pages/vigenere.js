@@ -100,7 +100,6 @@ export default function Vigenere() {
   }, [text, key]);
 
   useEffect(() => {
-    console.log(file);
     if (file !== null) {
       setFilename(file.name);
       const reader = new FileReader();
@@ -214,8 +213,8 @@ export default function Vigenere() {
                 label="Text"
                 focused
                 onChange={(e) => setText(e.target.value)}
+                placeholder="Enter text to encrypt or decrypt"
               >
-                Enter text to encrypt or decrypt
               </TextField>
             )}
 
@@ -246,6 +245,7 @@ export default function Vigenere() {
             variant="outlined"
             color="primary"
             label="Key"
+            placeholder="ex: KEY"
             focused
             onChange={(e) => setKey(e.target.value)}
           >
