@@ -37,6 +37,9 @@ export default function Home() {
         <Link href="/hill">
           <Typography sx={childSx}>Hill Cipher</Typography>
         </Link>
+        <Link href="/playfair">
+          <Typography sx={childSx}>Playfair Cipher</Typography>
+        </Link>
       </Container>
     </>
   );
