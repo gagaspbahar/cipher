@@ -78,7 +78,7 @@ export default function Vigenere() {
 
     const fileOutput = new Blob([new Uint8Array(output)]);
     element.href = URL.createObjectURL(fileOutput);
-    console.log(element.href)
+    console.log(element.href);
     if (filename === "") {
       element.download = "result.txt";
     } else {
@@ -196,6 +196,7 @@ export default function Vigenere() {
                   onClick={() => {
                     setIsDisabled(false);
                     setLockExtended(false);
+                    setExtended(false);
                   }}
                 >
                   Use text
@@ -214,8 +215,7 @@ export default function Vigenere() {
                 focused
                 onChange={(e) => setText(e.target.value)}
                 placeholder="Enter text to encrypt or decrypt"
-              >
-              </TextField>
+              ></TextField>
             )}
 
             <Button
@@ -276,38 +276,25 @@ export default function Vigenere() {
           <Button variant="outlined" onClick={handleSubmit} disabled={disable}>
             Go!
           </Button>
+          <TextField
+            sx={{
+              input: { color: "white" },
+              marginTop: "2em",
+              marginBottom: "1em",
+            }}
+            variant="outlined"
+            color="primary"
+            label="Result"
+            focused
+            value={result}
+          />
         </FormGroup>
 
-        <TextField
-          sx={{
-            input: { color: "white" },
-            marginTop: "2em",
-            marginBottom: "1em",
-          }}
-          variant="outlined"
-          color="primary"
-          label="Result"
-          focused
-          value={result}
-        />
-
         <ButtonGroup>
-          <Button
-            variant="outlined"
-            sx={{
-              width: "25%",
-            }}
-            onClick={handleSpace}
-          >
+          <Button variant="outlined" onClick={handleSpace}>
             Toggle Space
           </Button>
-          <Button
-            variant="outlined"
-            sx={{
-              width: "25%",
-            }}
-            onClick={downloadAsText}
-          >
+          <Button variant="outlined" onClick={downloadAsText}>
             Download result
           </Button>
         </ButtonGroup>

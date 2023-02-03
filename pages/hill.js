@@ -166,11 +166,10 @@ export default function Hill() {
                 variant="outlined"
                 color="primary"
                 label="Text"
+                placeholder="Enter text to encrypt or decrypt"
                 focused
                 onChange={(e) => setText(e.target.value)}
-              >
-                Enter text to encrypt or decrypt
-              </TextField>
+              ></TextField>
             )}
 
             <Button
@@ -215,39 +214,26 @@ export default function Hill() {
           <Button variant="outlined" onClick={handleSubmit} disabled={disable}>
             Go!
           </Button>
+          <TextField
+            sx={{
+              input: { color: "white" },
+              marginTop: "2em",
+              marginBottom: "1em",
+            }}
+            variant="outlined"
+            color="primary"
+            label="Result"
+            focused
+            value={result}
+          />
         </FormGroup>
 
-        <TextField
-          sx={{
-            input: { color: "white" },
-            marginTop: "2em",
-            marginBottom: "1em",
-          }}
-          variant="outlined"
-          color="primary"
-          label="Result"
-          focused
-          value={result}
-        />
-
         <ButtonGroup>
-          <Button
-            variant="outlined"
-            sx={{
-              width: "25%",
-            }}
-            onClick={handleSpace}
-          >
+          <Button variant="outlined" onClick={handleSpace}>
             Toggle Space
           </Button>
-          <Button
-            variant="outlined"
-            sx={{
-              width: "25%",
-            }}
-            onClick={downloadAsText}
-          >
-            Download as Text File
+          <Button variant="outlined" onClick={downloadAsText}>
+            Download result
           </Button>
         </ButtonGroup>
       </Container>

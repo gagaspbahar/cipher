@@ -208,8 +208,6 @@ export default function Affine() {
           <Button variant="contained" onClick={handleSubmit} disabled={disable}>
             Go!
           </Button>
-        </FormGroup>
-
         <TextField
           sx={{
             input: { color: "white" },
@@ -222,25 +220,21 @@ export default function Affine() {
           focused
           value={result}
         />
+        </FormGroup>
+
 
         <ButtonGroup>
           <Button
             variant="outlined"
-            sx={{
-              width: "25%",
-            }}
             onClick={handleSpace}
           >
             Toggle Space
           </Button>
           <Button
             variant="outlined"
-            sx={{
-              width: "25%",
-            }}
             onClick={downloadAsText}
           >
-            Download as Text File
+            Download result
           </Button>
         </ButtonGroup>
       </Container>
